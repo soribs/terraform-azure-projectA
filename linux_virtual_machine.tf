@@ -8,7 +8,7 @@ resource "azurerm_network_interface" "vm-linux-nic-dev-spain-001" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.snet-subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.public_IP.id
+    public_ip_address_id          = azurerm_public_ip.public_IP.id
   }
 }
 
@@ -23,7 +23,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
   ]
 
   admin_ssh_key {
-    username   = "azureuser"
+    username   = var.username
     public_key = file("~/.ssh/admin_ssh.pub")
   }
 

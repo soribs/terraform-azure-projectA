@@ -69,11 +69,21 @@ variable "public_IP" {
 }
 
 variable "nsg" {
-    type = string
-    default = "NSG-dev-spain-001"
+  type    = string
+  default = "NSG-dev-spain-001"
 }
 
 variable "security_rule_name" {
-    type = string
-    default = "security-rule-projectA-dev-spain-001" 
+  type    = string
+  default = "security-rule-projectA-dev-spain-001"
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "L'ID de ma souscription Azure"
+}
+
+variable "username" {
+  type = string
+  description = "Username Unbuntu"
 }

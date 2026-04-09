@@ -21,6 +21,6 @@ resource "azurerm_network_security_group" "security-rule-projectA-dev-spain-001"
 }
 
 resource "azurerm_subnet_network_security_group_association" "network-security-group-association-dev-spain-001" {
-  subnet_id      = azurerm_subnet.snet-subnet.id
+  subnet_id                 = azurerm_subnet.snet-subnet.id
   network_security_group_id = azurerm_network_security_group.security-rule-projectA-dev-spain-001.id
 }
