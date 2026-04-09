@@ -6,4 +6,4 @@ resource "azurerm_resource_group" "rg-projectA-dev-spain-001" {
     "name"         = var.tags.project
     "environement" = var.tags.environment
   }
-} 
+}

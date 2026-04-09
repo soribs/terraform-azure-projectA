@@ -61,5 +61,19 @@ variable "linux_vm" {
 variable "network_interface" {
   type    = string
   default = "nic-projectA"
+}
 
+variable "public_IP" {
+  type    = string
+  default = "public-IP-spain-001"
+}
+
+variable "nsg" {
+    type = string
+    default = "NSG-dev-spain-001"
+}
+
+variable "security_rule_name" {
+    type = string
+    default = "security-rule-projectA-dev-spain-001" 
 }
