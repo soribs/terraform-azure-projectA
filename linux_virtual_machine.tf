@@ -17,7 +17,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
   resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
   location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
   size                = "Standard_D2s_v3"
-  admin_username      = "azureuser"
+  admin_username      = var.username
   network_interface_ids = [
     azurerm_network_interface.vm-linux-nic-dev-spain-001.id,
   ]
