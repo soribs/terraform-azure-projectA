@@ -84,6 +84,17 @@ variable "subscription_id" {
 }
 
 variable "username" {
-  type = string
+  type        = string
   description = "Username Unbuntu"
+}
+
+variable "source_image_reference" {
+  type = map(string)
+  default = {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
 }

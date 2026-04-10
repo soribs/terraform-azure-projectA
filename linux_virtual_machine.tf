@@ -33,9 +33,9 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
   }
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    publisher = var.source_image_reference["publisher"]
+    offer     = var.source_image_reference["offer"]
+    sku       = var.source_image_reference["sku"]
+    version   = var.source_image_reference["version"]
   }
 }
