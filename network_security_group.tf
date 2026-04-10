@@ -16,7 +16,7 @@ resource "azurerm_network_security_group" "security-rule-projectA-dev-spain-001"
   }
 
   tags = {
-    environment = "Dev"
+    environment = var.tags.environment
   }
 }
 

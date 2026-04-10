@@ -16,7 +16,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
   name                = var.linux_vm
   resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
   location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  size                = "Standard_D2s_v3"
+  size                = var.vm-size
   admin_username      = var.username
   network_interface_ids = [
     azurerm_network_interface.vm-linux-nic-dev-spain-001.id,
@@ -28,8 +28,8 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
   }
 
   os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    caching              = var.os_disk["caching"]
+    storage_account_type = var.os_disk["storage_account_type"]
   }
 
   source_image_reference {

@@ -98,3 +98,17 @@ variable "source_image_reference" {
   }
 
 }
+
+variable "os_disk" {
+  type = map(string)
+  default = {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+  
+}
+
+variable "vm-size" {
+  type = string
+  default = "Standard_D2s_v3"
+}
