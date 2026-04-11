@@ -105,10 +105,10 @@ variable "os_disk" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-  
+
 }
 
 variable "vm-size" {
-  type = string
+  type    = string
   default = "Standard_D2s_v3"
 }
