@@ -51,7 +51,7 @@ resource "azurerm_monitor_data_collection_rule_association" "linux-vm-rule-assoc
 }
 
 resource "azurerm_log_analytics_workspace" "workspace" {
-  name                = "law-projectA-dev-spain-001"
+  name                = "log-projectA-dev-spain-001"
   resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
   location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
   sku                 = "PerGB2018"
