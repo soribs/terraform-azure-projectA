@@ -36,37 +36,50 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Resource Group                           │
-│                rg-projectA-dev-spain-001                    │
-│                                                             │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │                Virtual Network (VNet)                │   │
-│  │                  10.0.0.0/16                         │   │
-│  │                                                      │   │
-│  │   ┌──────────────┐    ┌───────────────────────────┐  │   │
-│  │   │   Subnet VM  │    │     Subnet Bastion        │  │   │
-│  │   │ 10.0.0.0/24  │    │      10.0.1.0/24          │  │   │
-│  │   │              │    │                           │  │   │
-│  │   │  ┌────────┐  │    │  ┌─────────────────────┐  │  │   │
-│  │   │  │  VM    │  │    │  │   Azure Bastion     │  │  │   │
-│  │   │  │ Linux  │◄─┼────┼──│  (accès SSH sécurisé│  │  │   │
-│  │   │  │Ubuntu  │  │    │  │   sans IP publique) │  │  │   │
-│  │   │  └───┬────┘  │    │  └─────────────────────┘  │  │   │
-│  │   │      │ NSG   │    └───────────────────────────┘  │   │
-│  │   └──────┼───────┘                                   │   │
-│  └──────────┼────────────────────────────────────────── ┘   │
-│             │                                               │
-│  ┌──────────▼──────────┐   ┌─────────────────────────────┐  │
-│  │   Data Disk (HDD)   │   │     Storage Account         │  │
-│  │  (disque additionel)│   │   (réception des logs)      │  │
-│  └─────────────────────┘   └────────────┬────────────────┘  │
-│                                         │                   │
-│  ┌──────────────────────────────────────▼────────────────┐  │
-│  │                     Monitoring                        │  │
-│  │  User Assigned Identity → AMA Agent → DCR → Blob      │  │
-│  └───────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                         Resource Group                               │
+│                     rg-projectA-dev-spain-001                        │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐    │
+│  │                   Virtual Network (VNet)                     │    │
+│  │                       10.0.0.0/16                            │    │
+│  │                                                              │    │
+│  │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐  │    │
+│  │  │   Subnet VM     │  │  Subnet Bastion  │  │ NAT Subnet  │  │    │
+│  │  │  10.0.0.0/24    │  │  10.0.1.0/24     │  │ 10.0.2.0/24 │  │    │
+│  │  │                 │  │                  │  └─────────────┘  │    │
+│  │  │  ┌───────────┐  │  │  ┌────────────┐  │                   │    │
+│  │  │  │  VM Linux │  │  │  │   Azure    │  │                   │    │ 
+│  │  │  │ Ubuntu    │◄─┼──┼──│   Bastion  │  │                   │    │ 
+│  │  │  │ (no PIP)  │  │  │  │            │  │                   │    │ 
+│  │  │  └─────┬─────┘  │  │  └────────────┘  │                   │    │
+│  │  │  NSG   │        │  └──────────────────┘                   │    │
+│  │  └────────┼────────┘                                         │    │
+│  └───────────┼──────────────────────────────────────────────────┘    │
+│              │ (sortie internet)                                     │
+│              ▼                                                       │
+│  ┌───────────────────────┐                                           │
+│  │     NAT Gateway       │ ←── Public IP : 158.158.32.68             │
+│  │  (outbound internet)  │                                           │
+│  └───────────────────────┘                                           │
+│                                                                      │
+│  ┌──────────────────────┐   ┌──────────────────────────────────────┐ │
+│  │   Data Disk (HDD)    │   │          Storage Account             │ │
+│  │  (disque additionnel)│   │       (réception des logs)           │ │
+│  └──────────────────────┘   └────────────────┬─────────────────────┘ │
+│                                              │                       │
+│  ┌───────────────────────────────────────────▼───────────────────┐   │
+│  │                        Monitoring                             │   │
+│  │     User Assigned Identity → AMA Agent → DCR → Blob           │   │
+│  └───────────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Flux réseau
+
+```
+[Entrée SSH]      Internet → Azure Bastion (PIP) → VM (IP privée uniquement)
+[Sortie internet] VM → NAT Gateway (158.158.32.68) → Internet
 ```
 
 ### Ressources déployées
@@ -74,18 +87,21 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 | Ressource | Nom | Description |
 |---|---|---|
 | Resource Group | `rg-projectA-dev-spain-001` | Conteneur de toutes les ressources |
-| Virtual Network | configurable via variable | VNet `10.0.0.0/16` avec 2 subnets |
-| Subnet VM | `snet-subnet` | `10.0.0.0/24` pour la VM |
-| Subnet Bastion | auto | `10.0.1.0/24` pour Azure Bastion |
-| Network Security Group | `NSG-dev-spain-001` | Règle SSH (port 22) uniquement |
-| Public IP | `public-IP-spain-001` | IP pour Azure Bastion |
-| Linux VM | `vm-linux-dev-spain-001` | Ubuntu 22.04 LTS — Standard_D2s_v3 |
+| Virtual Network | configurable via variable | VNet `10.0.0.0/16` avec 3 subnets |
+| Subnet VM | `snet-subnet` | `10.0.0.0/24` — héberge la VM |
+| Subnet Bastion | `AzureBastionSubnet` | `10.0.1.0/24` — réservé Azure Bastion |
+| Subnet NAT | `nat-subnet-projectA-dev-spain-001` | `10.0.2.0/24` — dédié NAT Gateway |
+| NSG | `NSG-dev-spain-001` | Attaché au subnet VM |
+| Public IP Bastion | `public-IP-spain-001` | IP d'entrée pour Azure Bastion uniquement |
+| Public IP NAT | `Nat-Gateway-PIP` | `158.158.32.68` — IP de sortie internet |
+| NAT Gateway | `NatGateway` | Sortie internet centralisée et sécurisée |
+| Linux VM | `vm-linux-dev-spain-001` | Ubuntu 22.04 LTS — Standard_D2s_v3 — sans IP publique directe |
 | Data Disk | — | Disque additionnel attaché à la VM |
-| Bastion | — | Accès SSH sécurisé sans exposition directe |
+| Azure Bastion | — | Accès SSH sécurisé sans exposition directe |
 | Storage Account | `stprojectadevspain` | Réception des logs / syslog |
 | User Assigned Identity | `uai-projectA-dev-spain-001` | Identité managée pour AMA |
 | Data Collection Rule | `linux-vm-rule` | Collecte des syslog Linux |
-| VM Extension (AMA) | `Linux-agent` | Azure Monitor Agent |
+| VM Extension (AMA) | `Linux-agent` | Azure Monitor Agent v2.15+ |
 
 ---
 
@@ -115,12 +131,13 @@ terraform-azure-projectA/
 ├── variables.tf                 # Déclaration de toutes les variables
 │
 ├── resource_group.tf            # Groupe de ressources Azure
-├── virtual_network.tf           # VNet
-├── subnets.tf                   # Subnets (VM + Bastion)
+├── virtual_network.tf           # VNet (dns_servers = [] → Azure DNS)
+├── subnets.tf                   # Subnets VM + Bastion + NAT
 ├── network_security_group.tf    # NSG + règles de sécurité
-├── Public_IP.tf                 # Adresse IP publique (Bastion)
+├── Public_IP.tf                 # IP publique Bastion + IP publique NAT Gateway
 │
-├── linux_virtual_machine.tf     # VM Linux + NIC + extension AMA
+├── nat_gateway.tf               # NAT Gateway + associations subnet + IP
+├── linux_virtual_machine.tf     # VM Linux + NIC (sans IP publique) + extension AMA
 ├── disk.tf                      # Disque de données additionnel
 ├── bastion.tf                   # Azure Bastion Host
 │
@@ -147,7 +164,8 @@ Toutes les variables sont définies dans `variables.tf`. Les variables sans vale
 | `username` | `string` | — | Nom d'utilisateur admin de la VM **(requis)** |
 | `vm-size` | `string` | `Standard_D2s_v3` | Taille de la VM |
 | `address_space` | `set(string)` | `["10.0.0.0/16"]` | Plage d'adresses du VNet |
-| `address_prefixes` | `list(string)` | `["10.0.0.0/24","10.0.1.0/24"]` | Sous-réseaux |
+| `address_prefixes` | `list(string)` | `["10.0.0.0/24","10.0.1.0/24","10.0.2.0/24"]` | Sous-réseaux (VM, Bastion, NAT) |
+| `dns_servers` | `set(string)` | `[]` | DNS du VNet — vide = Azure DNS `168.63.129.16` |
 | `source_image_reference` | `map(string)` | Ubuntu 22.04 LTS | Image de la VM |
 | `os_disk` | `map(string)` | ReadWrite / Standard_LRS | Configuration du disque OS |
 | `tags` | `map(string)` | `project=projectA, env=dev` | Tags Azure |
@@ -179,6 +197,21 @@ terraform apply
 terraform destroy
 ```
 
+### Vérifier la connectivité internet depuis la VM
+
+Après déploiement, connecte-toi via Azure Bastion et teste :
+
+```bash
+# Vérifier l'IP de sortie (doit afficher l'IP du NAT Gateway)
+curl ifconfig.me
+
+# Test DNS + HTTP
+curl https://google.com
+
+# Vérifier le DNS utilisé par la VM
+resolvectl status | grep "DNS Servers"
+```
+
 ---
 
 ## 📊 Monitoring
@@ -206,6 +239,8 @@ User Assigned Identity
     └── Monitoring Contributor         → VM               (accès monitoring)
 ```
 
+> ⚠️ Le `depends_on` sur l'extension AMA garantit que les role assignments sont créés **avant** que l'agent démarre, évitant tout échec d'authentification silencieux.
+
 ### Vérifier l'état de l'agent sur la VM
 
 ```bash
@@ -226,10 +261,11 @@ logger -p syslog.info "Test AMA monitoring message"
 
 ## 🔒 Sécurité
 
-- **Accès SSH** : via Azure Bastion uniquement — aucune exposition directe de la VM sur Internet
+- **Accès SSH** : via Azure Bastion uniquement — aucune IP publique directe sur la VM
+- **Sortie internet** : via NAT Gateway — IP de sortie fixe et traçable (`158.158.32.68`)
 - **Authentification VM** : clé SSH uniquement (pas de mot de passe)
-- **Identité managée** : User Assigned Identity — aucune clé ou secret stocké dans le code
-- **NSG** : seul le port 22 est autorisé en entrée
+- **Identité managée** : User Assigned Identity — aucune clé ou secret dans le code
+- **NSG** : attaché au subnet VM, règles outbound Azure par défaut conservées
 - **Secrets** : `subscription_id` et `username` exclus du dépôt via `.gitignore` + `terraform.tfvars`
 
 ---
@@ -255,11 +291,47 @@ L'extension AMA doit démarrer **après** la création des role assignments, sin
 | `Microsoft-Event` | ✅ | ✅ |
 | Custom streams | ✅ | ✅ |
 
+### Public IP sur NIC vs NAT Gateway
+Azure applique une **priorité stricte** pour le trafic sortant : une Public IP directement attachée à la NIC écrase le NAT Gateway. La VM n'avait aucun accès internet malgré un NAT Gateway correctement configuré.
+
+```
+Priorité Azure (outbound) :
+1. Public IP sur la NIC        ← écrase tout le reste ❌
+2. Load Balancer outbound rule
+3. NAT Gateway                 ← jamais atteint si #1 existe
+4. SNAT éphémère Azure
+```
+
+**Règle :** la NIC de la VM ne doit **jamais** avoir de Public IP quand un NAT Gateway gère la sortie internet. La `public_ip_address_id` doit être supprimée du bloc `ip_configuration` de la NIC.
+
+### DNS custom inexistants = perte totale de résolution de noms
+Définir des `dns_servers` dans le VNet avec des IPs inexistantes (`10.0.0.4`, `10.0.0.5`) bloque toute résolution DNS, même si le routage internet fonctionne parfaitement.
+
+Symptôme trompeur : `ping 8.8.8.8` échoue (ICMP souvent bloqué) mais `curl http://142.250.185.46` fonctionne → le routage est OK, c'est uniquement le DNS qui est cassé.
+
+```hcl
+# ✅ Toujours laisser vide pour utiliser le DNS Azure (168.63.129.16)
+variable "dns_servers" {
+  type    = set(string)
+  default = []
+}
+```
+
+### `address_prefixes` : attention aux index de liste
+Chaque subnet référence un index de `address_prefixes`. Si la liste contient moins d'entrées que de subnets, Terraform déploie un subnet avec une plage `null` sans erreur explicite.
+
+```hcl
+# ✅ 3 subnets = 3 entrées obligatoires
+default = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
+```
+
 ---
 
 ## 📎 Références
 
 - [Terraform AzureRM Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
-- [Azure Monitor Agent — Documentation](https://learn.microsoft.com/fr-fr/azure/azure-monitor/agents/azure-monitor-agent-overview)
+- [Azure NAT Gateway](https://learn.microsoft.com/fr-fr/azure/nat-gateway/nat-overview)
+- [Azure Monitor Agent](https://learn.microsoft.com/fr-fr/azure/azure-monitor/agents/azure-monitor-agent-overview)
 - [Data Collection Rules](https://learn.microsoft.com/fr-fr/azure/azure-monitor/essentials/data-collection-rule-overview)
 - [Azure Bastion](https://learn.microsoft.com/fr-fr/azure/bastion/bastion-overview)
+- [Azure DNS par défaut (168.63.129.16)](https://learn.microsoft.com/fr-fr/azure/virtual-network/what-is-ip-address-168-63-129-16)
