@@ -12,3 +12,11 @@ resource "azurerm_public_ip" "bastion-public-IP" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
+
+resource "azurerm_public_ip" "NatGateway-public-IP" {
+  name                = "Nat-Gateway-PIP"
+  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
+  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}

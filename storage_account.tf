@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "storage-account" {
-  name                     = "stprojectadevspain"
+  name                     = "stprojectadevspain02"
   resource_group_name      = azurerm_resource_group.rg-projectA-dev-spain-001.name
   location                 = azurerm_resource_group.rg-projectA-dev-spain-001.location
   account_tier             = "Standard"
