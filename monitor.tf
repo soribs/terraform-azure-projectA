@@ -1,7 +1,7 @@
 resource "azurerm_monitor_diagnostic_setting" "vm-diagnostics" {
   name               = "linux-vm-diagnostics"
   target_resource_id = azurerm_linux_virtual_machine.vm-linux-dev-spain-001.id
-  storage_account_id = azurerm_storage_account.storage-account.id
+  storage_account_id = azurerm_storage_account.storage-account["stprojectadevspain1"].id
 
   #   enabled_log {
   #     category = "AuditEvent"
@@ -25,8 +25,8 @@ resource "azurerm_monitor_data_collection_rule" "data-collection-rule" {
     }
   }
 
-# I choose log_analytics because storage_blop_direct is not compatible 
-# with "streams = [Microsoft-Syslog]" in the 4.67.0 version
+  # I choose log_analytics because storage_blop_direct is not compatible 
+  # with "streams = [Microsoft-Syslog]" in the 4.67.0 version
 
   data_flow {
     streams      = ["Microsoft-Syslog"]

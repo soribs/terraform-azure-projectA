@@ -6,7 +6,7 @@ resource "azurerm_public_ip" "public_IP" {
 }
 
 resource "azurerm_public_ip" "bastion-public-IP" {
-  name                = "bs-pip"
+  name                = "bas-pip"
   location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
   resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
   allocation_method   = "Static"
