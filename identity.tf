@@ -5,7 +5,7 @@ resource "azurerm_user_assigned_identity" "identity" {
 }
 
 resource "azurerm_role_assignment" "ra-storage-blob-contributor" {
-  scope                = azurerm_storage_account.storage-account.id
+  scope                = azurerm_storage_account.storage-account["stprojectadevspain1"].id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 }

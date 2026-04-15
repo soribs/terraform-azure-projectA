@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "vm-linux-nic-dev-spain-001" {
   ip_configuration {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.snet-subnet.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = var.vm_config.private_ip_address_allocation
     # public_ip_address_id          = azurerm_public_ip.public_IP.id
   }
 }
@@ -22,7 +22,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
     azurerm_network_interface.vm-linux-nic-dev-spain-001.id,
   ]
 
- identity {
+  identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.identity.id]
   }
@@ -46,14 +46,14 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
 }
 
 resource "azurerm_virtual_machine_extension" "linux-ama-agent" {
-  name                       = "Linux-agent"
+  name                       = var.vm_config.name
   virtual_machine_id         = azurerm_linux_virtual_machine.vm-linux-dev-spain-001.id
-  publisher                  = "Microsoft.Azure.Monitor"
-  type                       = "AzureMonitorLinuxAgent"
-  type_handler_version       = "1.0"
-  auto_upgrade_minor_version = true
+  publisher                  = var.vm_config.publisher
+  type                       = var.vm_config.type
+  type_handler_version       = var.vm_config.type_handler_version
+  auto_upgrade_minor_version = var.vm_config.auto_upgrade_minor_version
 
-   depends_on = [
+  depends_on = [
     azurerm_role_assignment.ra-storage-blob-contributor,
     azurerm_role_assignment.ra-monitoring-contributor,
   ]
