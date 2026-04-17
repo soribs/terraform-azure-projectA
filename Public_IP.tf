@@ -1,22 +1,22 @@
 resource "azurerm_public_ip" "public_IP" {
   name                = var.public_IP
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
   allocation_method   = "Static"
 }
 
 resource "azurerm_public_ip" "bastion-public-IP" {
   name                = "bas-pip"
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
 }
 
 resource "azurerm_public_ip" "NatGateway-public-IP" {
   name                = "Nat-Gateway-PIP"
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
 }

@@ -1,7 +1,7 @@
 resource "azurerm_managed_disk" "data-disk-1" {
   name                 = "data-disk-1"
-  location             = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name  = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location             = module.resource_group.resource_group_location
+  resource_group_name  = module.resource_group.resource_group_name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "10"
@@ -9,8 +9,8 @@ resource "azurerm_managed_disk" "data-disk-1" {
 
 resource "azurerm_managed_disk" "data-disk-2" {
   name                 = "data-disk-2"
-  location             = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name  = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location             = module.resource_group.resource_group_location
+  resource_group_name  = module.resource_group.resource_group_name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "20"

@@ -1,6 +1,6 @@
-resource "azurerm_resource_group" "rg-projectA-dev-spain-001" {
-  name     = var.resource_group_name
-  location = var.location_name
+module "resource_group" {
+  source = "git::ssh://git@github.com/soribs/terraform-azure-child-of-projectA.git?ref=v1.0.0"
 
-  tags = local.common_tags
+  resource_group_name = var.resource_group_name
+  project_name        = var.project_name
 }

@@ -1,8 +1,8 @@
 resource "azurerm_storage_account" "storage-account" {
   for_each                 = var.storage_account_name
   name                     = each.key
-  resource_group_name      = azurerm_resource_group.rg-projectA-dev-spain-001.name
-  location                 = azurerm_resource_group.rg-projectA-dev-spain-001.location
+  location                 = module.resource_group.resource_group_location
+  resource_group_name      = module.resource_group.resource_group_name
   account_tier             = var.is_production ? "Premium" : "Standard"
   account_replication_type = each.value.replication
 

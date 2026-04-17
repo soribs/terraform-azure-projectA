@@ -4,6 +4,11 @@ variable "resource_group_name" {
   default     = "rg-projectA-dev-spain-001"
 }
 
+variable "project_name" {
+  type    = string
+  default = "projectA"
+}
+
 variable "virtual_network_name" {
   description = "(Required) The Name of the Virtual Network"
   type        = string
@@ -207,6 +212,6 @@ variable "nsg_rules" {
       destination_port_range     = "443"
       source_address_prefix      = "*"
       destination_address_prefix = "*"
+    }
   }
-}
 }

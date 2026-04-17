@@ -1,7 +1,7 @@
 resource "azurerm_user_assigned_identity" "identity" {
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
   name                = "uai-projectA-dev-spain-001"
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
 }
 
 resource "azurerm_role_assignment" "ra-storage-blob-contributor" {

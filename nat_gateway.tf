@@ -1,7 +1,7 @@
 resource "azurerm_nat_gateway" "NatGateway" {
   name                = "NatGateway"
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
   sku_name            = "Standard"
 }
 
