@@ -1,12 +1,7 @@
 resource "azurerm_network_security_group" "nsg" {
   name                = "linuxvmnsg-projectA-dev-spain-001"
-<<<<<<< HEAD
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
-=======
-  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
-  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
->>>>>>> 6f056d73d98810ad6938c3120a0dd91a558f66b7
 
   tags = local.common_tags
 
