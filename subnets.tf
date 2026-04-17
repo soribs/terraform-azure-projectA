@@ -1,6 +1,10 @@
 resource "azurerm_subnet" "snet-subnet" {
   name                 = var.subnet
+<<<<<<< HEAD
   resource_group_name  = module.resource_group.resource_group_name
+=======
+  resource_group_name  = azurerm_resource_group.rg-projectA-dev-spain-001.name
+>>>>>>> 6f056d73d98810ad6938c3120a0dd91a558f66b7
   virtual_network_name = azurerm_virtual_network.vnet-projectA-dev-spain-001.name
   address_prefixes     = [var.address_prefixes[0]]
 }

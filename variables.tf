@@ -212,6 +212,11 @@ variable "nsg_rules" {
       destination_port_range     = "443"
       source_address_prefix      = "*"
       destination_address_prefix = "*"
+<<<<<<< HEAD
     }
   }
+=======
+  }
+}
+>>>>>>> 6f056d73d98810ad6938c3120a0dd91a558f66b7
 }

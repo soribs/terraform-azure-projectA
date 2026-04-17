@@ -7,8 +7,13 @@ resource "azurerm_public_ip" "public_IP" {
 
 resource "azurerm_public_ip" "bastion-public-IP" {
   name                = "bas-pip"
+<<<<<<< HEAD
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
+=======
+  location            = azurerm_resource_group.rg-projectA-dev-spain-001.location
+  resource_group_name = azurerm_resource_group.rg-projectA-dev-spain-001.name
+>>>>>>> 6f056d73d98810ad6938c3120a0dd91a558f66b7
   allocation_method   = "Static"
   sku                 = "Standard"
 }
