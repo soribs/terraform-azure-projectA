@@ -1,7 +1,7 @@
 resource "azurerm_monitor_diagnostic_setting" "vm-diagnostics" {
   name               = "linux-vm-diagnostics"
-  target_resource_id = azurerm_linux_virtual_machine.vm-linux-dev-spain-001.id
-  storage_account_id = azurerm_storage_account.storage-account["stprojectadevspain1"].id
+  target_resource_id = azurerm_linux_virtual_machine.vm-linux-prod-spain-001.id
+  storage_account_id = azurerm_storage_account.storage-account["stprojectaprodspain1"].id
 
   #   enabled_log {
   #     category = "AuditEvent"
@@ -46,12 +46,12 @@ resource "azurerm_monitor_data_collection_rule" "data-collection-rule" {
 
 resource "azurerm_monitor_data_collection_rule_association" "linux-vm-rule-association" {
   name                    = "Linux-dcra"
-  target_resource_id      = azurerm_linux_virtual_machine.vm-linux-dev-spain-001.id
+  target_resource_id      = azurerm_linux_virtual_machine.vm-linux-prod-spain-001.id
   data_collection_rule_id = azurerm_monitor_data_collection_rule.data-collection-rule.id
 }
 
 resource "azurerm_log_analytics_workspace" "workspace" {
-  name                = "log-projectA-dev-spain-001"
+  name                = "log-projectA-prod-spain-001"
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
   sku                 = "PerGB2018"

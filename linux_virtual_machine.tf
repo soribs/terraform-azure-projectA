@@ -1,5 +1,5 @@
 
-resource "azurerm_network_interface" "vm-linux-nic-dev-spain-001" {
+resource "azurerm_network_interface" "vm-linux-nic-prod-spain-001" {
   name                = var.network_interface
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
@@ -12,14 +12,14 @@ resource "azurerm_network_interface" "vm-linux-nic-dev-spain-001" {
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
+resource "azurerm_linux_virtual_machine" "vm-linux-prod-spain-001" {
   name                = var.linux_vm
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
   size                = var.vm-size
   admin_username      = var.username
   network_interface_ids = [
-    azurerm_network_interface.vm-linux-nic-dev-spain-001.id,
+    azurerm_network_interface.vm-linux-nic-prod-spain-001.id,
   ]
 
   identity {
@@ -47,7 +47,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux-dev-spain-001" {
 
 resource "azurerm_virtual_machine_extension" "linux-ama-agent" {
   name                       = var.vm_config.name
-  virtual_machine_id         = azurerm_linux_virtual_machine.vm-linux-dev-spain-001.id
+  virtual_machine_id         = azurerm_linux_virtual_machine.vm-linux-prod-spain-001.id
   publisher                  = var.vm_config.publisher
   type                       = var.vm_config.type
   type_handler_version       = var.vm_config.type_handler_version

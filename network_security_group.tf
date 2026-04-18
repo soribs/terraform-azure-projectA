@@ -1,4 +1,4 @@
-resource "azurerm_network_security_group" "security-rule-projectA-dev-spain-001" {
+resource "azurerm_network_security_group" "security-rule-projectA-prod-spain-001" {
   name                = var.nsg
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
@@ -20,7 +20,7 @@ resource "azurerm_network_security_group" "security-rule-projectA-dev-spain-001"
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "network-security-group-association-dev-spain-001" {
+resource "azurerm_subnet_network_security_group_association" "network-security-group-association-prod-spain-001" {
   subnet_id                 = azurerm_subnet.snet-subnet.id
-  network_security_group_id = azurerm_network_security_group.security-rule-projectA-dev-spain-001.id
+  network_security_group_id = azurerm_network_security_group.security-rule-projectA-prod-spain-001.id
 }

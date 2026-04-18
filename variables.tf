@@ -1,7 +1,7 @@
 variable "resource_group_name" {
   description = "(Required) The Name which should be used for this Resource Group. Changing this forces a new Resource Group to be created."
   type        = string
-  default     = "rg-projectA-dev-spain-001"
+  default     = "rg-projectA-prod-spain-001"
 }
 
 variable "project_name" {
@@ -41,7 +41,7 @@ variable "tags" {
   type        = map(string)
   default = {
     project     = "projectA"
-    environment = "dev"
+    environment = "prod"
   }
 }
 
@@ -66,7 +66,7 @@ variable "subnet" {
 variable "linux_vm" {
   description = "(Required) The Name of the Linux Virtual Machine"
   type        = string
-  default     = "vm-linux-dev-spain-001"
+  default     = "vm-linux-prod-spain-001"
 }
 
 variable "network_interface" {
@@ -81,15 +81,15 @@ variable "storage_account_name" {
     replication = string
   }))
   default = {
-    "stprojectadevspain1" = {
+    "stprojectaprodspain1" = {
       tier        = "Standard"
       replication = "LRS"
     },
-    "stprojectadevspain2" = {
+    "stprojectaprodspain2" = {
       tier        = "Standard"
       replication = "LRS"
     },
-    "stprojectadevspain3" = {
+    "stprojectaprodspain3" = {
       tier        = "Standard"
       replication = "LRS"
     },
@@ -102,12 +102,12 @@ variable "public_IP" {
 
 variable "nsg" {
   type    = string
-  default = "NSG-dev-spain-001"
+  default = "NSG-prod-spain-001"
 }
 
 variable "security_rule_name" {
   type    = string
-  default = "security-rule-projectA-dev-spain-001"
+  default = "security-rule-projectA-prod-spain-001"
 }
 
 variable "subscription_id" {

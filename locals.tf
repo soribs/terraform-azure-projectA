@@ -1,6 +1,6 @@
 locals {
   common_tags = {
-    environment = "dev"
+    environment = "prod"
     project     = "projectA"
     location    = "Madrid"
   }

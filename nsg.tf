@@ -1,5 +1,5 @@
 resource "azurerm_network_security_group" "nsg" {
-  name                = "linuxvmnsg-projectA-dev-spain-001"
+  name                = "linuxvmnsg-projectA-prod-spain-001"
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name
 

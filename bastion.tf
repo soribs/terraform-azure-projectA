@@ -1,4 +1,4 @@
-resource "azurerm_bastion_host" "bastion-projectA-dev-spain-001" {
+resource "azurerm_bastion_host" "bastion-projectA-prod-spain-001" {
   name                = "bs-linux"
   location            = module.resource_group.resource_group_location
   resource_group_name = module.resource_group.resource_group_name

@@ -28,7 +28,7 @@
 Ce projet déploie une infrastructure Azure complète et sécurisée pour héberger une machine virtuelle Linux avec supervision intégrée. Il illustre les bonnes pratiques de l'IaC : séparation des responsabilités par fichier, gestion des dépendances explicites, et usage d'une identité managée pour l'authentification sans secret.
 
 **Région de déploiement :** `Spain Central`  
-**Environnement :** `dev`  
+**Environnement :** `prod`  
 **Naming convention :** `<type>-<project>-<env>-<region>-<index>`
 
 ---
@@ -38,7 +38,7 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │                         Resource Group                               │
-│                     rg-projectA-dev-spain-001                        │
+│                     rg-projectA-prod-spain-001                        │
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐    │
 │  │                   Virtual Network (VNet)                     │    │
@@ -86,20 +86,20 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 
 | Ressource | Nom | Description |
 |---|---|---|
-| Resource Group | `rg-projectA-dev-spain-001` | Conteneur de toutes les ressources |
+| Resource Group | `rg-projectA-prod-spain-001` | Conteneur de toutes les ressources |
 | Virtual Network | configurable via variable | VNet `10.0.0.0/16` avec 3 subnets |
 | Subnet VM | `snet-subnet` | `10.0.0.0/24` — héberge la VM |
 | Subnet Bastion | `AzureBastionSubnet` | `10.0.1.0/24` — réservé Azure Bastion |
-| Subnet NAT | `nat-subnet-projectA-dev-spain-001` | `10.0.2.0/24` — dédié NAT Gateway |
-| NSG | `NSG-dev-spain-001` | Attaché au subnet VM |
+| Subnet NAT | `nat-subnet-projectA-prod-spain-001` | `10.0.2.0/24` — dédié NAT Gateway |
+| NSG | `NSG-prod-spain-001` | Attaché au subnet VM |
 | Public IP Bastion | `public-IP-spain-001` | IP d'entrée pour Azure Bastion uniquement |
 | Public IP NAT | `Nat-Gateway-PIP` | `158.158.32.68` — IP de sortie internet |
 | NAT Gateway | `NatGateway` | Sortie internet centralisée et sécurisée |
-| Linux VM | `vm-linux-dev-spain-001` | Ubuntu 22.04 LTS — Standard_D2s_v3 — sans IP publique directe |
+| Linux VM | `vm-linux-prod-spain-001` | Ubuntu 22.04 LTS — Standard_D2s_v3 — sans IP publique directe |
 | Data Disk | — | Disque additionnel attaché à la VM |
 | Azure Bastion | — | Accès SSH sécurisé sans exposition directe |
-| Storage Account | `stprojectadevspain` | Réception des logs / syslog |
-| User Assigned Identity | `uai-projectA-dev-spain-001` | Identité managée pour AMA |
+| Storage Account | `stprojectaprodspain` | Réception des logs / syslog |
+| User Assigned Identity | `uai-projectA-prod-spain-001` | Identité managée pour AMA |
 | Data Collection Rule | `linux-vm-rule` | Collecte des syslog Linux |
 | VM Extension (AMA) | `Linux-agent` | Azure Monitor Agent v2.15+ |
 
@@ -107,7 +107,7 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 
 ## ✅ Prérequis
 
-- [Terraform](https://developer.hashicorp.com/terraform/install) `>= 1.0`
+- [Terraform](https://prodeloper.hashicorp.com/terraform/install) `>= 1.0`
 - [Azure CLI](https://learn.microsoft.com/fr-fr/cli/azure/install-azure-cli) installé et configuré
 - Un compte Azure avec une **souscription active**
 - Une paire de clés SSH générée localement
@@ -157,7 +157,7 @@ Toutes les variables sont définies dans `variables.tf`. Les variables sans vale
 
 | Variable | Type | Défaut | Description |
 |---|---|---|---|
-| `resource_group_name` | `string` | `rg-projectA-dev-spain-001` | Nom du Resource Group |
+| `resource_group_name` | `string` | `rg-projectA-prod-spain-001` | Nom du Resource Group |
 | `virtual_network_name` | `string` | — | Nom du VNet **(requis)** |
 | `location_name` | `string` | `Spain central` | Région Azure |
 | `subscription_id` | `string` | — | ID de la souscription Azure **(requis)** |
@@ -168,7 +168,7 @@ Toutes les variables sont définies dans `variables.tf`. Les variables sans vale
 | `dns_servers` | `set(string)` | `[]` | DNS du VNet — vide = Azure DNS `168.63.129.16` |
 | `source_image_reference` | `map(string)` | Ubuntu 22.04 LTS | Image de la VM |
 | `os_disk` | `map(string)` | ReadWrite / Standard_LRS | Configuration du disque OS |
-| `tags` | `map(string)` | `project=projectA, env=dev` | Tags Azure |
+| `tags` | `map(string)` | `project=projectA, env=prod` | Tags Azure |
 
 Créer un fichier `terraform.tfvars` (non commité) pour les valeurs sensibles :
 
@@ -176,7 +176,7 @@ Créer un fichier `terraform.tfvars` (non commité) pour les valeurs sensibles :
 # terraform.tfvars — NE PAS COMMITER
 subscription_id      = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 username             = "adminuser"
-virtual_network_name = "vnet-projectA-dev-spain-001"
+virtual_network_name = "vnet-projectA-prod-spain-001"
 ```
 
 ---

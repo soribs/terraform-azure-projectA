@@ -12,5 +12,5 @@ resource "azurerm_storage_account" "storage-account" {
 resource "azurerm_storage_container" "container" {
   count              = var.is_production ? 1 : 0
   name               = "syslog"
-  storage_account_id = azurerm_storage_account.storage-account["stprojectadevspain1"].id
+  storage_account_id = azurerm_storage_account.storage-account["stprojectaprodspain1"].id
 }

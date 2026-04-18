@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name  = "rg-state-projectA-dev-spain-001"
-    storage_account_name = "ststateprojectadevspain1"
+    resource_group_name  = "rg-state-projectA-prod-spain-001"
+    storage_account_name = "ststateprojectaprodspain1"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
@@ -22,6 +22,6 @@ provider "azurerm" {
 }
 
 moved {
-  from = azurerm_resource_group.rg-projectA-dev-spain-001
+  from = azurerm_resource_group.rg-projectA-prod-spain-001
   to   = module.resource_group.azurerm_resource_group.this
 }
