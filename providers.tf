@@ -5,12 +5,7 @@ terraform {
       version = "4.67.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "rg-state-projectA-prod-spain-001"
-    storage_account_name = "ststateprojectaprodspain1"
-    container_name       = "tfstate"
-    key                  = "terraform.tfstate"
-  }
+  backend "azurerm" {}
 
   required_version = ">= 1.1.0"
 }
