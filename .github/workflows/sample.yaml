@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs: 
   terraform-plan:
-    runs-on: ubuntu_latest
+    runs-on: ubuntu-latest
     steps:
       - name: setup terraform
         uses: hashicorp/setup-terraform@v3
