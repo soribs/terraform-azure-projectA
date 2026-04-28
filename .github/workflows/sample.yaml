@@ -28,7 +28,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./terraform-azure-projectA
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
