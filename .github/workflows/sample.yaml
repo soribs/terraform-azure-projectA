@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -20,11 +20,7 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./terraform-azure-projectA # Ajoute cette ligne
-
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: ./terraform-azure-projectA # Ajoute cette ligne
+        working-directory: ./terraform-azure-projectA
 
       - name: Liste les fichiers
         run: ls -R
