@@ -1,19 +1,22 @@
 name: terraform plan
 
-on: workflow_dispatch
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
-jobs: 
+jobs:
   terraform-plan:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: setup terraform
+
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: terraform init
+      - name: Terraform Init
         run: terraform init
-        
-      - name: terrform plan
+
+      - name: Terraform Plan
         run: terraform plan
