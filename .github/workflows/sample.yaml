@@ -20,3 +20,8 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: ./terraform-azure-projectA # Ajoute cette ligne
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./terraform-azure-projectA # Ajoute cette ligne
