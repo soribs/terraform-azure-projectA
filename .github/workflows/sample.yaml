@@ -25,3 +25,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
         working-directory: ./terraform-azure-projectA # Ajoute cette ligne
+
+      - name: Liste les fichiers
+        run: ls -R
