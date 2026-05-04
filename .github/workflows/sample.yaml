@@ -19,12 +19,21 @@ jobs:
         run: git config --global url."https://${{ secrets.GH_PAT }}@github.com/".insteadOf "https://github.com/"
 
       - name: Terraform Init
-        run: terraform init -backend-config="storage_account_name=stprojectaprodspain1" -backend-config="container_name=syslog" -backend-config="key=terraform.tfstate" -backend-config="resource_group_name=rg-projectA-prod-spain-001"
+        run: |
+          terraform init \
+          -backend-config="storage_account_name=stprojectaprodspain1" \
+          -backend-config="container_name=syslog" \
+          -backend-config="key=terraform.tfstate" \
+          -backend-config="resource_group_name=rg-projectA-prod-spain-001" \
+          -backend-config="use_azuread_auth=true" \
+          -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+          -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_USE_AZUREAD: "true"
 
       - name: Liste les fichiers
         run: ls -R
