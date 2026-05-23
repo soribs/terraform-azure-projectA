@@ -38,7 +38,7 @@ Ce projet déploie une infrastructure Azure complète et sécurisée pour héber
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
 │                         Resource Group                               │
-│                     rg-projectA-prod-spain-001                        │
+│                     rg-projectA-prod-spain-001                       │
 │                                                                      │
 │  ┌──────────────────────────────────────────────────────────────┐    │
 │  │                   Virtual Network (VNet)                     │    │
